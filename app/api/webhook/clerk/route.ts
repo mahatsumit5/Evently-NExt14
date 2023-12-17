@@ -6,6 +6,7 @@ import { clerkClient } from "@clerk/nextjs";
 import { NextResponse } from "next/server";
 
 export async function POST(req: Request) {
+  console.log("inside post function");
   // You can find this in the Clerk Dashboard -> Webhooks -> choose the webhook
   const WEBHOOK_SECRET = process.env.WEBHOOK_SECRET;
 
@@ -98,6 +99,7 @@ export async function POST(req: Request) {
   }
 
   if (eventType === "user.deleted") {
+    console.log("user deleted");
     const { id } = evt.data;
 
     const deletedUser = await deleteUser(id!);
@@ -106,4 +108,7 @@ export async function POST(req: Request) {
   }
 
   return new Response("", { status: 200 });
+}
+export async function GET() {
+  return NextResponse.json({ message: "check" });
 }
