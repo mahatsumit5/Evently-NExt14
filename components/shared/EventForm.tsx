@@ -100,7 +100,7 @@ const EventForm = ({ userId, type }: EventFormProps) => {
               </FormItem>
             )}
           />
-          <FormField
+          {/* <FormField
             control={form.control}
             name="description"
             render={({ field }) => (
@@ -114,7 +114,7 @@ const EventForm = ({ userId, type }: EventFormProps) => {
                 <FormMessage />
               </FormItem>
             )}
-          />
+          /> */}
         </div>
 
         <Button type="submit">Submit</Button>
