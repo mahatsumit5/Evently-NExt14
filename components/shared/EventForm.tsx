@@ -50,6 +50,7 @@ const EventForm = ({ userId, type }: EventFormProps) => {
         onSubmit={form.handleSubmit(onSubmit)}
         className="flex flex-col gap-5"
       >
+        {/* title and category */}
         <div className="flex flex-col gap-5 md:flex-row">
           <FormField
             control={form.control}
@@ -85,6 +86,8 @@ const EventForm = ({ userId, type }: EventFormProps) => {
             )}
           />
         </div>
+
+        {/* description */}
         <div className="flex flex-col gap-5 md:flex-row">
           <FormField
             control={form.control}
