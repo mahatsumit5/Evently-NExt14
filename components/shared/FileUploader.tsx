@@ -1,4 +1,5 @@
 import React, { Dispatch, SetStateAction } from "react";
+import { Input } from "../ui/input";
 type FileUploadProps = {
   onFieldChange: (value: string) => void;
   imageUrl: string;
@@ -9,7 +10,11 @@ const FileUploader = ({
   onFieldChange,
   setFiles,
 }: FileUploadProps) => {
-  return <div>upload</div>;
+  return (
+    <div className="h-10">
+      <Input type="file" />
+    </div>
+  );
 };
 
 export default FileUploader;
