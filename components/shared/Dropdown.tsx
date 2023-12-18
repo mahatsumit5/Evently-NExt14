@@ -1,4 +1,4 @@
-import React, { startTransition, useState } from "react";
+import React, { startTransition, useEffect, useState } from "react";
 import {
   Select,
   SelectContent,
@@ -6,20 +6,10 @@ import {
   SelectTrigger,
   SelectValue,
 } from "@/components/ui/select";
-import {
-  AlertDialog,
-  AlertDialogAction,
-  AlertDialogCancel,
-  AlertDialogContent,
-  AlertDialogDescription,
-  AlertDialogFooter,
-  AlertDialogHeader,
-  AlertDialogTitle,
-  AlertDialogTrigger,
-} from "@/components/ui/alert-dialog";
 
 import { ICatagory } from "@/lib/mongodb/database/models/category.model";
-import { Input } from "../ui/input";
+import CategoryDialog from "./CategoryDialog";
+import { getAllCategories } from "@/lib/actions/category.actions";
 
 type DropDownProps = {
   value?: string;
@@ -27,9 +17,13 @@ type DropDownProps = {
 };
 const Dropdown = ({ value, onChangeHandler }: DropDownProps) => {
   const [categories, setCatagories] = useState<ICatagory[]>([]);
-  const [newCategory, setCategory] = useState("");
-
-  const handleAddCategory = () => {};
+  useEffect(() => {
+    async function getData() {
+      const result = await getAllCategories();
+      setCatagories(result as ICatagory[]);
+    }
+    getData();
+  }, []);
   return (
     <div>
       <Select onValueChange={onChangeHandler} defaultValue={value}>
@@ -47,32 +41,7 @@ const Dropdown = ({ value, onChangeHandler }: DropDownProps) => {
                 {category.name}
               </SelectItem>
             ))}
-          <AlertDialog>
-            <AlertDialogTrigger className="p-medium-14 flex w-full rounded-sm py-3 pl-18 text-primary-500 hover:bg-primary-50 focus:text-primary-500">
-              Open
-            </AlertDialogTrigger>
-            <AlertDialogContent className="bg-white">
-              <AlertDialogHeader>
-                <AlertDialogTitle>New Category</AlertDialogTitle>
-                <AlertDialogDescription>
-                  <Input
-                    type="text"
-                    placeholder="Category Name"
-                    className="input-field mt-3"
-                    onChange={(e) => setCategory(e.target.value)}
-                  />
-                </AlertDialogDescription>
-              </AlertDialogHeader>
-              <AlertDialogFooter>
-                <AlertDialogCancel>Cancel</AlertDialogCancel>
-                <AlertDialogAction
-                  onClick={() => startTransition(handleAddCategory)}
-                >
-                  Add
-                </AlertDialogAction>
-              </AlertDialogFooter>
-            </AlertDialogContent>
-          </AlertDialog>
+          <CategoryDialog setCatagories={setCatagories} />
         </SelectContent>
       </Select>
     </div>
