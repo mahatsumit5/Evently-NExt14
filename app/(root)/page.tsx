@@ -8,10 +8,9 @@ export default async function Home() {
   const events = await getAllEvents({
     query: "",
     category: "",
-    limit: 1,
+    limit: 5,
     page: 1,
   });
-  console.log(events);
   return (
     <>
       <section className="bg-primary-50 bg-dotted-pattern bg-contain py-5 md:py-10">
