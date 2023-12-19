@@ -1,10 +1,16 @@
 "use server";
-import { CreateEventParams, GetAllEventsParams } from "@/types";
+import {
+  CreateEventParams,
+  DeleteEventParams,
+  GetAllEventsParams,
+  UpdateEventParams,
+} from "@/types";
 import { connectToDatabase } from "../mongodb/database";
 import { handleError } from "../utils";
 import User from "../mongodb/database/models/user.model";
 import Event from "../mongodb/database/models/event.model";
 import Category from "../mongodb/database/models/category.model";
+import { revalidatePath } from "next/cache";
 
 const populateEvent = async (query: any) => {
   return query
@@ -21,10 +27,9 @@ const populateEvent = async (query: any) => {
 };
 export async function createEvent({ event, userId, path }: CreateEventParams) {
   try {
-    console.log(userId);
     await connectToDatabase();
     const organizer = await User.findById(userId);
-    console.log(organizer);
+
     if (!organizer) throw new Error("organiser not found");
     const newEvent = await Event.create({
       ...event,
@@ -32,6 +37,7 @@ export async function createEvent({ event, userId, path }: CreateEventParams) {
       category: event.categoryId,
       organizer: userId,
     });
+    revalidatePath(path);
     return JSON.parse(JSON.stringify(newEvent));
   } catch (error) {
     console.log(error);
@@ -69,3 +75,35 @@ export const getAllEvents = async ({
     handleError(error);
   }
 };
+
+export const deleteEvent = async ({ eventId, path }: DeleteEventParams) => {
+  try {
+    await connectToDatabase();
+    const deletedEvent = await Event.findByIdAndDelete(eventId);
+    if (deletedEvent) revalidatePath(path);
+    return JSON.parse(JSON.stringify(event));
+  } catch (error) {
+    handleError(error);
+  }
+};
+
+export async function updateEvent({ event, userId, path }: UpdateEventParams) {
+  try {
+    await connectToDatabase();
+    const organizer = await User.findById(userId);
+
+    if (!organizer) throw new Error("organiser not found");
+    const newEvent = await Event.findByIdAndUpdate(
+      event._id,
+      { ...event, category: event.categoryId },
+      {
+        new: true,
+      }
+    );
+    revalidatePath(path);
+    return JSON.parse(JSON.stringify(newEvent));
+  } catch (error) {
+    console.log(error);
+    handleError(error);
+  }
+}

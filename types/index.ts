@@ -37,7 +37,7 @@ export type UpdateEventParams = {
   event: {
     _id: string;
     title: string;
-    imageUrl: string;
+    // imageUrl: string;
     description: string;
     location: string;
     startDateTime: Date;

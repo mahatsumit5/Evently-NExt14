@@ -22,29 +22,30 @@ import ReactDatePicker from "react-datepicker";
 import { Checkbox } from "@/components/ui/checkbox";
 import Image from "next/image";
 import { eventFormSchema } from "@/lib/validator";
-import { createEvent } from "@/lib/actions/event.actions";
+import { createEvent, updateEvent } from "@/lib/actions/event.actions";
 import { useRouter } from "next/navigation";
+import { IEvent } from "@/lib/mongodb/database/models/event.model";
+import { eventDefaultValues } from "@/constants";
 type EventFormProps = {
   userId: string;
   type: "Create" | "Update";
+  event?: IEvent;
+  eventId?: string;
 };
-const EventForm = ({ userId, type }: EventFormProps) => {
+const EventForm = ({ userId, type, event, eventId }: EventFormProps) => {
   const [files, setFiles] = useState<File[]>([]);
+  const initialValues =
+    type === "Update" && event
+      ? {
+          ...event,
+          startDate: new Date(event.startDate),
+          endDate: new Date(event.endDate),
+        }
+      : eventDefaultValues;
   const router = useRouter();
   const form = useForm<z.infer<typeof eventFormSchema>>({
     resolver: zodResolver(eventFormSchema),
-    defaultValues: {
-      title: "",
-      description: "",
-      categoryId: "",
-      location: "",
-      //   imageUrl: "",
-      startDate: new Date(),
-      endDate: new Date(),
-      price: "",
-      isFree: false,
-      url: "",
-    },
+    defaultValues: initialValues,
   });
 
   async function onSubmit(values: z.infer<typeof eventFormSchema>) {
@@ -58,6 +59,25 @@ const EventForm = ({ userId, type }: EventFormProps) => {
         if (newEvent) {
           form.reset();
           router.push(`/events/${newEvent._id}`);
+        }
+      } catch (error) {
+        console.log(error);
+      }
+    }
+    if (type === "Update") {
+      try {
+        if (!eventId) {
+          router.back();
+          return;
+        }
+        const updatedEvent = await updateEvent({
+          userId,
+          event: { ...values, _id: eventId },
+          path: `/events/${eventId}`,
+        });
+        if (updatedEvent) {
+          form.reset();
+          router.push(`/events/${updatedEvent._id}`);
         }
       } catch (error) {
         console.log(error);
@@ -327,7 +347,7 @@ const EventForm = ({ userId, type }: EventFormProps) => {
           />
         </div>
 
-        <Button type="submit">Submit</Button>
+        <Button type="submit">{type === "Create" ? "Submit" : "Update"}</Button>
       </form>
     </Form>
   );
