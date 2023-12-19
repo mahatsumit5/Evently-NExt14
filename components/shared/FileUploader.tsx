@@ -19,7 +19,7 @@ const FileUploader = ({
         onChange={(e) => {
           const { files } = e.target;
           setFiles(files);
-          onFieldChange(convertFileToUrl(files));
+          // onFieldChange(convertFileToUrl());
         }}
       />
     </div>
