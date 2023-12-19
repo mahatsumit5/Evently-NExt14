@@ -146,7 +146,7 @@ export async function getEventByUser({ userId, page }: GetEventsByUserParams) {
     await connectToDatabase();
     if (!userId) throw new Error("User is must be passed");
 
-    const events = await Event.find({ organizer: userId });
+    const events = await populateEvent(Event.find({ organizer: userId }));
     return {
       data: JSON.parse(JSON.stringify(events)),
       totalPages: 1,
