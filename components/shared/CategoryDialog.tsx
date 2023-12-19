@@ -19,11 +19,13 @@ type dialogProps = {
 };
 const CategoryDialog = ({ setCatagories }: dialogProps) => {
   const [newCategory, setCategory] = useState("");
+
   const handleAddCategory = () => {
     createCategory({ newCategory }).then((result) => {
       setCatagories((prevState) => [...prevState, result]);
     });
   };
+
   return (
     <AlertDialog>
       <AlertDialogTrigger className="p-medium-14 flex w-full rounded-sm py-3 pl-18 text-primary-500 hover:bg-primary-50 focus:text-primary-500">

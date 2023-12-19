@@ -5,7 +5,7 @@ export interface IEvent extends Document {
   description?: string;
   location?: string;
   createdAt: Date;
-  imageUrl: string;
+  imageUrl?: string;
   startDate: Date;
   endDate: Date;
   price?: string;
@@ -19,7 +19,7 @@ const eventSchema = new Schema({
   description: { type: String },
   location: { type: String },
   createdAt: { type: Date, default: Date.now },
-  imageUrl: { type: String, required: true },
+  imageUrl: { type: String, default: "" },
   startDate: { type: Date, default: Date.now },
   endDate: { type: Date, default: Date.now },
   price: { type: String },
@@ -28,5 +28,5 @@ const eventSchema = new Schema({
   category: { type: Schema.Types.ObjectId, ref: "Category" },
   organizer: { type: Schema.Types.ObjectId, ref: "User" },
 });
-const Event = models.User || model("Event", eventSchema); //get model from mongoose or create a new one if does not exist
+const Event = models.Event || model("Event", eventSchema); //get model from mongoose or create a new one if does not exist
 export default Event;

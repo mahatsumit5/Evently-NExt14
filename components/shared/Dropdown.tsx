@@ -17,6 +17,7 @@ type DropDownProps = {
 };
 const Dropdown = ({ value, onChangeHandler }: DropDownProps) => {
   const [categories, setCatagories] = useState<ICatagory[]>([]);
+
   useEffect(() => {
     async function getData() {
       const result = await getAllCategories();
@@ -24,6 +25,7 @@ const Dropdown = ({ value, onChangeHandler }: DropDownProps) => {
     }
     getData();
   }, []);
+
   return (
     <div>
       <Select onValueChange={onChangeHandler} defaultValue={value}>
@@ -34,7 +36,7 @@ const Dropdown = ({ value, onChangeHandler }: DropDownProps) => {
           {categories.length > 0 &&
             categories.map((category) => (
               <SelectItem
-                value="light"
+                value={category._id}
                 key={category._id}
                 className="select-item "
               >

@@ -1,9 +1,9 @@
 "use client";
+
 import { zodResolver } from "@hookform/resolvers/zod";
-import React, { useState } from "react";
 import { useForm } from "react-hook-form";
-import DatePicker from "react-datepicker";
-import * as z from "zod";
+import { Checkbox } from "@/components/ui/checkbox";
+
 import { Button } from "@/components/ui/button";
 import {
   Form,
@@ -14,55 +14,36 @@ import {
   FormLabel,
   FormMessage,
 } from "@/components/ui/form";
+import { Textarea } from "@/components/ui/textarea";
+
 import { Input } from "@/components/ui/input";
-import Dropdown from "./Dropdown";
-import { Textarea } from "../ui/textarea";
-import FileUploader from "./FileUploader";
-import ReactDatePicker from "react-datepicker";
-import { Checkbox } from "@/components/ui/checkbox";
-import Image from "next/image";
 import { eventFormSchema } from "@/lib/validator";
-import { createEvent } from "@/lib/actions/event.actions";
-import { useRouter } from "next/navigation";
+import * as z from "zod";
+import { eventDefaultValues } from "@/constants";
+import Dropdown from "./Dropdown";
+import FileUploader from "./FileUploader";
+import { useState } from "react";
+import Image from "next/image";
+import DatePicker from "react-datepicker";
+import "react-datepicker/dist/react-datepicker.css";
 type EventFormProps = {
   userId: string;
   type: "Create" | "Update";
 };
+
 const EventForm = ({ userId, type }: EventFormProps) => {
   const [files, setFiles] = useState<File[]>([]);
-  const router = useRouter();
+  const initialValues = eventDefaultValues;
+
   const form = useForm<z.infer<typeof eventFormSchema>>({
     resolver: zodResolver(eventFormSchema),
-    defaultValues: {
-      title: "",
-      description: "",
-      categoryId: "",
-      location: "",
-      //   imageUrl: "",
-      startDate: new Date(),
-      endDate: new Date(),
-      price: "",
-      isFree: false,
-      url: "",
-    },
+    defaultValues: initialValues,
   });
 
-  async function onSubmit(values: z.infer<typeof eventFormSchema>) {
-    if (type === "Create") {
-      try {
-        const newEvent = await createEvent({
-          event: values,
-          userId,
-          path: "/profile",
-        });
-        if (newEvent) {
-          form.reset();
-          router.push(`/events/${newEvent._id}`);
-        }
-      } catch (error) {
-        console.log(error);
-      }
-    }
+  // 2. Define a submit handler.
+  async function onSubmit(values: z.infer<typeof eventFormSchema>, e: any) {
+    e.preventDefault();
+    console.log("Submitted Values:", values);
   }
   return (
     <Form {...form}>
@@ -76,10 +57,10 @@ const EventForm = ({ userId, type }: EventFormProps) => {
             control={form.control}
             name="title"
             render={({ field }) => (
-              <FormItem>
+              <FormItem className="w-full">
                 <FormControl>
                   <Input
-                    placeholder="Event title"
+                    placeholder="Event Title"
                     {...field}
                     className="input-field"
                   />
@@ -89,7 +70,6 @@ const EventForm = ({ userId, type }: EventFormProps) => {
               </FormItem>
             )}
           />
-
           <FormField
             control={form.control}
             name="categoryId"
@@ -127,7 +107,7 @@ const EventForm = ({ userId, type }: EventFormProps) => {
               </FormItem>
             )}
           />
-          {/* <FormField
+          <FormField
             control={form.control}
             name="imageUrl"
             render={({ field }) => (
@@ -142,7 +122,7 @@ const EventForm = ({ userId, type }: EventFormProps) => {
                 <FormMessage />
               </FormItem>
             )}
-          /> */}
+          />
         </div>
 
         {/* location */}
@@ -218,7 +198,7 @@ const EventForm = ({ userId, type }: EventFormProps) => {
                 <FormControl>
                   <div className="flex-center h-[55px] w-full overflow-hidden rounded-full bg-gray-50 px-4 py-2">
                     <Image
-                      src="/assets/icons/calendar.svg"
+                      src={"/assets/icons/calendar.svg"}
                       alt="calendar"
                       width={24}
                       height={24}
@@ -228,7 +208,7 @@ const EventForm = ({ userId, type }: EventFormProps) => {
                       {" "}
                       End Date:
                     </p>
-                    <ReactDatePicker
+                    <DatePicker
                       selected={field.value}
                       onChange={(date: Date) => field.onChange(date)}
                       showTimeSelect
@@ -255,7 +235,7 @@ const EventForm = ({ userId, type }: EventFormProps) => {
                 <FormControl>
                   <div className="flex-center h-[55px] w-full overflow-hidden rounded-full bg-gray-50 px-4 py-2">
                     <Image
-                      src={"assets/icons/dollar.svg"}
+                      src={"/assets/icons/dollar.svg"}
                       alt="dollar"
                       width={24}
                       height={24}
@@ -283,8 +263,6 @@ const EventForm = ({ userId, type }: EventFormProps) => {
                               <Checkbox
                                 id="isFree"
                                 className="mr-2 h-5 w-5 border-2 border-primary-500"
-                                onCheckedChange={field.onChange}
-                                checked={field.value}
                               />
                             </div>
                           </FormControl>
@@ -327,7 +305,13 @@ const EventForm = ({ userId, type }: EventFormProps) => {
           />
         </div>
 
-        <Button type="submit">Submit</Button>
+        <Button
+          type="submit"
+          size={"lg"}
+          disabled={form.formState.isSubmitting}
+        >
+          {form.formState.isSubmitting ? "Submitting" : `${type} Event`}
+        </Button>
       </form>
     </Form>
   );

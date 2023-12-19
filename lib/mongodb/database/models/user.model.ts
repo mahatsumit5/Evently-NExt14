@@ -8,5 +8,6 @@ const userSchema = new Schema({
   lastName: { type: String, required: true },
   photo: { type: String, required: true },
 });
+
 const User = models.User || model("User", userSchema); //get model from mongoose or create a new one if does not exist
 export default User;
