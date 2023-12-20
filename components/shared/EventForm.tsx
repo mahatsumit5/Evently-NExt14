@@ -26,6 +26,7 @@ import { createEvent, updateEvent } from "@/lib/actions/event.actions";
 import { useRouter } from "next/navigation";
 import { IEvent } from "@/lib/mongodb/database/models/event.model";
 import { eventDefaultValues } from "@/constants";
+import { useUploadThing } from "@/lib/uploadthing";
 type EventFormProps = {
   userId: string;
   type: "Create" | "Update";
@@ -43,16 +44,28 @@ const EventForm = ({ userId, type, event, eventId }: EventFormProps) => {
         }
       : eventDefaultValues;
   const router = useRouter();
+  const { startUpload } = useUploadThing("imageUploader");
   const form = useForm<z.infer<typeof eventFormSchema>>({
     resolver: zodResolver(eventFormSchema),
     defaultValues: initialValues,
   });
 
   async function onSubmit(values: z.infer<typeof eventFormSchema>) {
+    let uploadedImageUrl = values.imageUrl;
+
+    if (files.length > 0) {
+      const uploadedImages = await startUpload(files);
+
+      if (!uploadedImages) {
+        return;
+      }
+
+      uploadedImageUrl = uploadedImages[0].url;
+    }
     if (type === "Create") {
       try {
         const newEvent = await createEvent({
-          event: values,
+          event: { ...values, imageUrl: uploadedImageUrl },
           userId,
           path: "/profile",
         });
@@ -149,7 +162,7 @@ const EventForm = ({ userId, type, event, eventId }: EventFormProps) => {
               </FormItem>
             )}
           />
-          {/* <FormField
+          <FormField
             control={form.control}
             name="imageUrl"
             render={({ field }) => (
@@ -164,7 +177,7 @@ const EventForm = ({ userId, type, event, eventId }: EventFormProps) => {
                 <FormMessage />
               </FormItem>
             )}
-          /> */}
+          />
         </div>
 
         {/* location */}

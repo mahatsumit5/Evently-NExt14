@@ -36,7 +36,7 @@ export async function createEvent({ event, userId, path }: CreateEventParams) {
     if (!organizer) throw new Error("organiser not found");
     const newEvent = await Event.create({
       ...event,
-      imageUrl: "",
+
       category: event.categoryId,
       organizer: userId,
     });
