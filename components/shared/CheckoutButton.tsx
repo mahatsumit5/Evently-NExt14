@@ -5,6 +5,7 @@ import Link from "next/link";
 import React from "react";
 import { Button } from "../ui/button";
 import { IEvent } from "@/lib/mongodb/database/models/event.model";
+import Checkout from "./Checkout";
 
 const CheckoutButton = ({ event }: { event: IEvent }) => {
   const { user } = useUser();
@@ -20,13 +21,12 @@ const CheckoutButton = ({ event }: { event: IEvent }) => {
       ) : (
         <>
           <SignedOut>
-            <Button asChild className="button rounded-full" size="lg">
-              <Link href="/sign-in">Get Tickets</Link>
+            <Button>
+              <Link href={"/sign-in"}>Get tickets</Link>
             </Button>
           </SignedOut>
-
           <SignedIn>
-            {/* <Checkout event={event} userId={userId} /> */}
+            <Checkout event={event} userId={userId} />
           </SignedIn>
         </>
       )}
