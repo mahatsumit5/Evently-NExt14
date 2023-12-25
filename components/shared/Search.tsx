@@ -14,7 +14,6 @@ const Search = ({
   const [query, setQuery] = useState("");
   const router = useRouter();
   const searchParams = useSearchParams();
-
   useEffect(() => {
     const delayDebounceFn = setTimeout(() => {
       let newUrl = "";
@@ -31,6 +30,7 @@ const Search = ({
           keysToRemove: ["query"],
         });
       }
+      console.log(newUrl);
 
       router.push(newUrl, { scroll: false });
     }, 300);

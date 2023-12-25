@@ -71,13 +71,14 @@ export function formUrlQuery({ params, key, value }: UrlQueryParams) {
 
   currentUrl[key] = value;
 
-  return qs.stringifyUrl(
+  const url = qs.stringifyUrl(
     {
       url: window.location.pathname,
       query: currentUrl,
     },
     { skipNull: true }
   );
+  return url;
 }
 
 export function removeKeysFromQuery({

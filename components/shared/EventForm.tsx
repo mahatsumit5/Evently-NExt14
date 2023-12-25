@@ -4,7 +4,10 @@ import React, { useState } from "react";
 import { useForm } from "react-hook-form";
 import DatePicker from "react-datepicker";
 import * as z from "zod";
+import "react-datepicker/dist/react-datepicker.css";
 import { Button } from "@/components/ui/button";
+import "react-datepicker/dist/react-datepicker-cssmodules.css";
+
 import {
   Form,
   FormControl,
