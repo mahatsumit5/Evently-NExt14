@@ -1,6 +1,6 @@
 "use server";
 import { connectToDatabase } from "../mongodb/database";
-import Category from "../mongodb/database/models/category.model";
+import Category from "../mongodb/models/category.model";
 import { handleError } from "../utils";
 type categoryParams = {
   newCategory: string;

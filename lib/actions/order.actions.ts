@@ -10,9 +10,9 @@ import {
 import { handleError } from "../utils";
 import { redirect } from "next/navigation";
 import { connectToDatabase } from "../mongodb/database";
-import Order from "../mongodb/database/models/order.model";
-import Event from "../mongodb/database/models/event.model";
-import User from "../mongodb/database/models/user.model";
+import Order from "../mongodb/models/order.model";
+import Event from "../mongodb/models/event.model";
+import User from "../mongodb/models/user.model";
 import { ObjectId } from "mongodb";
 export const checkoutOrder = async (order: CheckoutOrderParams) => {
   const stripe = new Stripe(process.env.STRIPE_SECRET_KEY!);

@@ -12,7 +12,7 @@ import {
 import { Input } from "../ui/input";
 import { Dispatch, SetStateAction, startTransition, useState } from "react";
 import { createCategory } from "@/lib/actions/category.actions";
-import { ICatagory } from "@/lib/mongodb/database/models/category.model";
+import { ICatagory } from "@/lib/mongodb/models/category.model";
 
 type dialogProps = {
   setCatagories: Dispatch<SetStateAction<ICatagory[]>>;

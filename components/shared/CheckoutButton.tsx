@@ -4,7 +4,7 @@ import { SignedIn, SignedOut, useUser } from "@clerk/nextjs";
 import Link from "next/link";
 import React from "react";
 import { Button } from "../ui/button";
-import { IEvent } from "@/lib/mongodb/database/models/event.model";
+import { IEvent } from "@/lib/mongodb/models/event.model";
 import Checkout from "./Checkout";
 
 const CheckoutButton = ({ event }: { event: IEvent }) => {

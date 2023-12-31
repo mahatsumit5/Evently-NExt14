@@ -7,7 +7,7 @@ import {
   SelectValue,
 } from "@/components/ui/select";
 
-import { ICatagory } from "@/lib/mongodb/database/models/category.model";
+import { ICatagory } from "@/lib/mongodb/models/category.model";
 import CategoryDialog from "./CategoryDialog";
 import { getAllCategories } from "@/lib/actions/category.actions";
 

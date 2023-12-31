@@ -27,7 +27,7 @@ import Image from "next/image";
 import { eventFormSchema } from "@/lib/validator";
 import { createEvent, updateEvent } from "@/lib/actions/event.actions";
 import { useRouter } from "next/navigation";
-import { IEvent } from "@/lib/mongodb/database/models/event.model";
+import { IEvent } from "@/lib/mongodb/models/event.model";
 import { eventDefaultValues } from "@/constants";
 import { useUploadThing } from "@/lib/uploadthing";
 type EventFormProps = {

@@ -4,7 +4,7 @@ import {
   getEventById,
   getRelatedEventsByCategory,
 } from "@/lib/actions/event.actions";
-import { IEvent } from "@/lib/mongodb/database/models/event.model";
+import { IEvent } from "@/lib/mongodb/models/event.model";
 import { formatDateTime } from "@/lib/utils";
 import { SearchParamProps } from "@/types";
 import Image from "next/image";
